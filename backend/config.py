@@ -1,0 +1,10 @@
+MONGO_HOST='killuayz.top'
+MONGO_PORT=46372
+MONGO_DB='PondMemoryDB'
+MONGO_USER='root'
+MONGO_PASSWORD='bgBpTS6RgNmdh34dUgE534sT2G73KaBSNsWxC0qdlkg3pTWRfB'
+MAIL_HOST='smtp.qq.com'
+MAIL_USER='2959243019@qq.com'
+MAIL_PASSWORD='clriocahxwmsdcfg'
+MAIL_SENDER='2959243019@qq.com'
+MAIL_TITLE='PondMemory令牌'
