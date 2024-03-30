@@ -1,6 +1,6 @@
 import pymongo
 import config
-from pondmemory.utils.Logger import logger
+from reservation.utils.Logger import logger
 from flask import current_app
 import config
 # MONGO_HOST = current_app.config.get("MONGO_HOST")

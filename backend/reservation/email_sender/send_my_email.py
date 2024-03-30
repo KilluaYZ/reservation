@@ -11,7 +11,7 @@ from email.mime.text import MIMEText #邮箱正文
 from email.mime.multipart import MIMEMultipart #邮箱主体
 from email.header import Header #邮箱头、标题、收件人
 import config
-from pondmemory.email_sender.email_htmls import getRegisterEmail, getChangePasswdEmail
+from reservation.email_sender.email_htmls import getRegisterEmail, getChangePasswdEmail
 from flask import current_app
 
 # mail_host = current_app.config['MAIL_HOST']

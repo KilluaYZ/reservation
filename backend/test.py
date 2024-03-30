@@ -1,4 +1,4 @@
-# from pondmemory.database.Mongo import Mongo
+# from reservation.database.Mongo import Mongo
 # print(Mongo().insert_one("User", {"username": "killuayz", "password": "<PASSWORD>"}))
 # Mongo().delete_many("User",{"username": "killuayz"})
 # res = Mongo().find_one("User", {"username": "xinxin"})
@@ -6,7 +6,7 @@
 # print(res["username"])
 #
 
-from pondmemory.utils.file import uploadFile
+from reservation.utils.file import uploadFile
 from bson import ObjectId
 # fileId = ''
 with open("C:\\Users\\killuayz\\Desktop\\微信图片_20240211233055.png", 'rb') as f:

@@ -3,8 +3,8 @@ import time
 from typing import Dict, Union, Optional
 import hashlib
 import os
-from pondmemory.utils.myExceptions import NetworkException
-from pondmemory.database.Mongo import Mongo
+from reservation.utils.myExceptions import NetworkException
+from reservation.database.Mongo import Mongo
 import datetime
 from bson.objectid import ObjectId
 mongo = Mongo()

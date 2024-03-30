@@ -1,9 +1,9 @@
 from flask import Blueprint, request, send_file, Request
-from pondmemory.utils.build_response import *
-from pondmemory.utils.Logger import logger
+from reservation.utils.build_response import *
+from reservation.utils.Logger import logger
 from bson import ObjectId
-from pondmemory.utils.Tools import *
-from pondmemory.utils.file import *
+from reservation.utils.Tools import *
+from reservation.utils.file import *
 import io
 import base64
 

@@ -1,6 +1,6 @@
 from gridfs import *
-from pondmemory.database.Mongo import Mongo
-from pondmemory.utils.Logger import logger
+from reservation.database.Mongo import Mongo
+from reservation.utils.Logger import logger
 from datetime import datetime
 from bson import ObjectId
 import hashlib

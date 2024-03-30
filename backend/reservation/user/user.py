@@ -3,13 +3,13 @@ from typing import List
 import datetime
 from flask import Blueprint, request
 from werkzeug.security import check_password_hash, generate_password_hash
-from pondmemory.utils.myExceptions import NetworkException
-from pondmemory.utils.build_response import *
-from pondmemory.utils.Logger import logger
-from pondmemory.database.Mongo import Mongo
+from reservation.utils.myExceptions import NetworkException
+from reservation.utils.build_response import *
+from reservation.utils.Logger import logger
+from reservation.database.Mongo import Mongo
 from bson.objectid import ObjectId
-from pondmemory.utils.Tools import *
-from pondmemory.email_sender.send_my_email import *
+from reservation.utils.Tools import *
+from reservation.email_sender.send_my_email import *
 
 bp = Blueprint('user', __name__, url_prefix='/user')
 mongo = Mongo()
@@ -340,7 +340,7 @@ def checkSessionsAvailability():
     mongo.delete_many("UserToken", {"visitTime": {"$lte": datetime.datetime.now() - datetime.timedelta(hours=1)}})
 
 
-from pondmemory.utils.file import *
+from reservation.utils.file import *
 
 @bp.route('/avatar/list', methods=['POST'])
 def avatar_list_api():
