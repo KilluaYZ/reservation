@@ -4,7 +4,7 @@
     <!--  头部导航栏  -->
     <el-row style="display: flex; justify-content: space-between; align-items: center; width: 100%; height: 100%; flex-direction: row; flex-wrap: nowrap; margin: 0px 20px 0px 20px">
       <el-row style="display: flex; width: fit-content; height: 100%; align-items: center" @click="onClickLogo">
-        <h1 style="height: fit-content; width: fit-content; color: #66b4e0; font-family:'Super Funtime';letter-spacing: 3px;font-size: 40px ">PondMemory</h1>
+        <h1 style="height: fit-content; width: fit-content; letter-spacing: 3px;font-size: 40px; user-select: none">🦌大预约</h1>
       </el-row>
       <el-row style="display: flex; width: fit-content; height: 100%; align-items: center">
         <el-row v-if="UserInfo != null && UserInfo != undefined && UserInfo.avatar != null && UserInfo.avatar != undefined" style="justify-content: center; align-items: center">
@@ -16,7 +16,6 @@
             <template #dropdown>
               <el-dropdown-menu style="width: fit-content">
                 <el-dropdown-item @click="onClickGoToPersonalBtn"><el-row style="display: flex; flex-wrap: nowrap;justify-content: center; align-items: center"><el-icon><User /></el-icon>个人中心</el-row></el-dropdown-item>
-                <el-dropdown-item @click="onClickGoToSettingBtn"><el-row style="display: flex; flex-wrap: nowrap;justify-content: center; align-items: center"><el-icon><Setting /></el-icon>设置</el-row></el-dropdown-item>
                 <el-dropdown-item @click="onCLickLogoutBtn" divided><el-row style="display: flex; flex-wrap: nowrap;justify-content: center; align-items: center"><el-icon><SwitchButton /></el-icon>退出登录</el-row></el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -38,14 +37,13 @@
   >
     <el-row style="width: 100%; height: fit-content">
       <el-row style="width: 100%; height: fit-content; display: flex; justify-content: center;align-items: center; flex-direction: column">
-        <span style="font-weight: bold; font-size: xx-large; color: #081642">Pond Memory</span>
-        <!--        <span style="font-size: medium; color: #606060">每一种情绪都是真的</span>-->
+        <span style="font-weight: bold; font-size: xx-large; color: #081642">Reservation</span>
       </el-row>
       <el-row style="width: 100%; height: fit-content; justify-content: center; align-items: center">
         <transition name='list'>
           <transition-group name="list">
             <template v-if='cur_stage === "login"' key='login-form'>
-              <p class="title">欢迎登陆<span class="s-desc">Pond Memory</span></p>
+              <p class="title">欢迎登陆<span class="s-desc">Reservation</span></p>
               <el-form
                   label-position='top'
                   :model='form'
@@ -80,7 +78,7 @@
               </el-form>
             </template>
             <template v-else-if='cur_stage === "register"' key='register-form'>
-              <p class="title">欢迎注册<span class="s-desc">Pond Memory</span></p>
+              <p class="title">欢迎注册<span class="s-desc">Reservation</span></p>
               <el-form
                   label-position='top'
                   :model='form'
@@ -138,7 +136,7 @@
               </el-form>
             </template>
             <template v-else-if='cur_stage === "changePwd"' key='change-pwd-form'>
-              <p class="title">修改密码<span class="s-desc">Pond Memory</span></p>
+              <p class="title">修改密码<span class="s-desc">Reservation</span></p>
               <el-form
                   label-position='top'
                   :model='form'
@@ -523,12 +521,6 @@ const onCLickLogoutBtn = () => {
 const onClickGoToPersonalBtn = () => {
   router.push({
     path: "/personal",
-  })
-}
-
-const onClickGoToSettingBtn = () => {
-  router.push({
-    path: "/setting",
   })
 }
 

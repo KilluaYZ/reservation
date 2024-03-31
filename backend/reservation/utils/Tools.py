@@ -71,8 +71,8 @@ def check_tokens_reponse_if_not200(token, roles):
     state = check_tokens_get_state(token, roles)
     if state == 401:
         raise NetworkException(code=401, msg='会话已过期，请重新登录')
-    elif state == 401:
-        raise NetworkException(code=401, msg='持有该令牌的用户不存在或已被删除')
+    elif state == 404:
+        raise NetworkException(code=404, msg='持有该令牌的用户不存在或已被删除')
     elif state == 403:
         raise NetworkException(code=403, msg='您没有该操作的权限，请联系管理员')
     elif state == 500:
@@ -160,3 +160,12 @@ def checkFrontendArgsIsNotNone(argList: list):
         argVal = arg['val']
         if argVal is None:
             raise NetworkException(400, f"前端传来数据缺少{argKey}参数")
+
+
+def time_str_to_num(time_str: str) -> int:
+    tmp_time = datetime.datetime.strptime(time_str, '%H:%M')
+    return tmp_time.hour * 60 + tmp_time.minute
+
+def time_num_to_str(time_num: int) -> str:
+    tmp_time = datetime.datetime(2020, 1, 1, int(time_num/60), int(time_num%60))
+    return tmp_time.strftime('%H:%M')

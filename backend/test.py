@@ -1,36 +1,44 @@
-# from reservation.database.Mongo import Mongo
-# print(Mongo().insert_one("User", {"username": "killuayz", "password": "<PASSWORD>"}))
-# Mongo().delete_many("User",{"username": "killuayz"})
-# res = Mongo().find_one("User", {"username": "xinxin"})
-# print(res)
-# print(res["username"])
+import datetime
+# time_str = '9:00'
+# tmp_time = datetime.datetime.strptime(time_str, '%H:%M')
+# print(tmp_time.hour, tmp_time.minute)
+# print(tmp_time.hour * 60 + tmp_time.minute)
+
+
+# def time_num_to_str(time_num: int) -> str:
+#     tmp_time = datetime.datetime(2020, 1, 1, int(time_num/60), int(time_num%60))
+#     return tmp_time.strftime('%H:%M')
 #
+# print(time_num_to_str(540))
 
-from reservation.utils.file import uploadFile
-from bson import ObjectId
-# fileId = ''
-with open("C:\\Users\\killuayz\\Desktop\\微信图片_20240211233055.png", 'rb') as f:
-    fileId = uploadFile(f.read(), "微信图片_20240211233055.png", ObjectId("65c9b8f4ffd0ded94ed6987a"),  False)
 
-# import mimetypes
-# print(mimetypes.guess_type('C:\\Users\\killuayz\\Desktop\\微信图片_20240211233055.png'))
+def check_if_avaliable(start_time: int, end_time: int, disable_time: list) -> bool:
+    tmp_disabled_list = []
+    # 如果结束时间早于开始时间，则排除
+    for _time in disable_time:
+        if _time[1] <= start_time:
+            continue
+        else:
+            tmp_disabled_list.append(_time)
+    tmp_distable_list2 = []
+    # 如果开始时间晚于结束时间，则排除
+    for _time in tmp_disabled_list:
+        if _time[0] >= end_time:
+            continue
+        else:
+            tmp_distable_list2.append(_time)
 
-# with open("./test1.png", "wb") as f:
-#     res = getFileFromDB({"_id": ObjectId('65c9bb1b05195b1912e1c14b')})
-#     if(res is not None):
-#         f.write(res)
+    if len(tmp_distable_list2) == 0:
+        # 如果列表为空，说明没有冲突的，则可以分配
+        return True
+    # 反之则无法分配
+    return False
 
-# from minio import Minio
-# client = Minio(
-#     "killuayz.top:9000",
-#     access_key="eEn6r2cs1eyGFADxeJZE",
-#     secret_key="T1WQGCEI9P1c0NC4KizNZF5PGWzVB2sq6vG6hiOa",
-#     secure=False
-# )
-# import os
-# print(client.list_buckets())
-# file_stat = os.stat("C:\\Users\\killuayz\\Pictures\\Screenshots\\屏幕截图 2024-01-18 171646.png")
-# with open("C:\\Users\\killuayz\\Pictures\\Screenshots\\屏幕截图 2024-01-18 171646.png", 'rb') as f:
-#     client.put_object("pond-memory-bucket", 'pic1', f, file_stat.st_size)
-#
-# print(client.list_objects("pond-memory-bucket",recursive=True))
+# print(check_if_avaliable(721, 1111, [
+#     [510,  720],
+#     [870, 1110],
+#     [1140, 1320]
+# ]))
+
+for i in range(0,10,2):
+    print(i)

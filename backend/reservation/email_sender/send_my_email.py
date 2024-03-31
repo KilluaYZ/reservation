@@ -25,7 +25,7 @@ mail_user = config.MAIL_USER
 mail_pass = config.MAIL_PASSWORD
 sender = config.MAIL_SENDER
 title = config.MAIL_TITLE
-
+info_title = config.MAIL_INFO_TITLE
 def sendEmail(mail_title: str, mail_content: str, mail_receiver: str, mail_type='html'):
     msg = MIMEMultipart()
     msg['Subject'] = Header(mail_title, 'utf-8')
@@ -50,6 +50,9 @@ def sendRegisterEmail(userName: str, checkCode: str, mail_receiver: str):
 
 def sendChangePasswdEmail(userName: str, checkCode: str, mail_receiver: str):
     sendEmail(title, getChangePasswdEmail(userName, checkCode), mail_receiver)
+
+def sendTextEmail(msg: str, mail_receiver: str):
+    sendEmail(info_title, msg, mail_receiver)
 #
 # sendRegisterEmail('ziyang','57736','2020201694@ruc.edu.cn')
 # sendChangePasswdEmail('ziyang','57736','2020201694@ruc.edu.cn')

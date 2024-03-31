@@ -86,6 +86,19 @@
           <el-descriptions-item>
             <template #label>
               <el-row justify="start" align="middle">
+                <el-image class="descriptions_icon" src="/icons/9165720_bell_alarm_icon.png"/>
+                <el-row justify="center" align="middle" style="width: calc(100% - 26px)">
+                  <span class="descriptions_label">手机</span>
+                </el-row>
+              </el-row>
+            </template>
+            <el-input v-if="isUpdatingProfile" v-model="form.phone" placeholder="请输入手机号码"/>
+            <el-text v-else>{{UserInfo.phone}}</el-text>
+          </el-descriptions-item>
+
+          <el-descriptions-item>
+            <template #label>
+              <el-row justify="start" align="middle">
                 <el-image class="descriptions_icon" src="/icons/9165610_right_align_icon.png"/>
                 <el-row justify="center" align="middle" style="width: calc(100% - 26px)">
                   <span class="descriptions_label">个性签名</span>
@@ -97,6 +110,69 @@
           </el-descriptions-item>
         </el-descriptions>
       </el-row>
+
+      <el-row style="width: 100%; height: fit-content; margin: 40px 0 0 0 ">
+        <el-descriptions
+            title="预约平台信息"
+            border
+            style="width: 100%"
+            :column="3"
+        >
+          <template #extra>
+            <el-button size="small" @click="onClickUpdateUserInfoBtn">更新信息</el-button>
+
+          </template>
+
+          <el-descriptions-item>
+            <template #label>
+              <el-row justify="start" align="middle">
+                <el-image class="descriptions_icon" src="/icons/9165463_qr_code_icon.png"/>
+                <el-row justify="center" align="middle" style="width: calc(100% - 26px)">
+                  <span class="descriptions_label">学号</span>
+                </el-row>
+              </el-row>
+            </template>
+            <el-text>{{UserInfo.userInfo.username}}</el-text>
+          </el-descriptions-item>
+
+          <el-descriptions-item>
+            <template #label>
+              <el-row justify="start" align="middle">
+                <el-image class="descriptions_icon" :src="UserInfo.sex == 'male' ? '/icons/9165726_user_male_avatar_icon.png' : '/icons/9165712_user_female_avatar_icon.png'"/>
+                <el-row justify="center" align="middle" style="width: calc(100% - 26px)">
+                  <span class="descriptions_label">姓名</span>
+                </el-row>
+              </el-row>
+            </template>
+            <el-text>{{UserInfo.userInfo.fullName}}</el-text>
+          </el-descriptions-item>
+
+          <el-descriptions-item>
+            <template #label>
+              <el-row justify="start" align="middle">
+                <el-image class="descriptions_icon" src="/icons/9165463_qr_code_icon.png"/>
+                <el-row justify="center" align="middle" style="width: calc(100% - 26px)">
+                  <span class="descriptions_label">学院</span>
+                </el-row>
+              </el-row>
+            </template>
+            <el-text>{{UserInfo.userInfo.department}}</el-text>
+          </el-descriptions-item>
+
+          <el-descriptions-item >
+            <template #label>
+              <el-row justify="start" align="middle">
+                <el-image class="descriptions_icon" src="/icons/9165463_qr_code_icon.png"/>
+                <el-row justify="center" align="middle" style="width: calc(100% - 26px)">
+                  <span class="descriptions_label">Authorization</span>
+                </el-row>
+              </el-row>
+            </template>
+            <el-text>{{UserInfo.authorization.substring(0,50)+'......'}}</el-text>
+          </el-descriptions-item>
+        </el-descriptions>
+      </el-row>
+
     </el-row>
   </el-row>
 
@@ -148,12 +224,63 @@
       </el-tabs>
     </el-row>
   </el-dialog>
+
+
+  <el-dialog
+      v-model="showGetCaptchaDialog"
+      width="400"
+      style="height: fit-content"
+  >
+    <p class="title">欢迎登陆<span class="s-desc">预约平台</span></p>
+    <p>请在下方输入您ruc预约平台账号密码(账号密码不会被存储，请放心输入)</p>
+    <el-form
+        label-position='top'
+        :model='captchaForm'
+        :rules='loginCaptchaRules'
+    >
+      <el-form-item prop='username' >
+        <el-input
+            v-model='captchaForm.username'
+            placeholder='用户名'
+            class='login-input'
+            size='large'
+
+        />
+      </el-form-item>
+      <el-form-item prop='password'>
+        <el-input
+            v-model='captchaForm.password'
+            type='password'
+            show-password
+            placeholder='密码'
+            class='login-input'
+            size='large'
+        />
+      </el-form-item>
+      <el-form-item prop='password'>
+       <el-row style="flex-wrap: nowrap; justify-content: space-between; align-items: center">
+         <el-input
+             v-model='captchaForm.captcha'
+             type='password'
+             show-password
+             placeholder='验证码'
+             class='login-input'
+             size='large'
+         />
+         <el-image style="width: fit-content; height: fit-content" :src="'data:image/png;base64,'+captchaInfo.captchaText" />
+       </el-row>
+      </el-form-item>
+      <el-row style='margin-top: 30px'>
+        <el-button type='primary' @click="onClickPlatformLoginBtn" class="login-button">确认</el-button>
+      </el-row>
+    </el-form>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
 import {getUserInfo, setUserInfo} from "@/utils/auth.js";
 import {onMounted, ref} from "vue";
-import { changeUserProfile, userProfile, getAvatarListAPI, updateAvatarListAPI } from '@/api/user.js'
+import { changeUserProfile, userProfile, getAvatarListAPI, updateAvatarListAPI, getCaptchaInfo, updateUserAuthorization} from '@/api/user.js'
 import {ElMessage, genFileId, UploadFile, UploadInstance, UploadProps, UploadRawFile} from "element-plus";
 import {getFileObjByFileId, uploadFileAPI} from '@/api/file.js'
 import {getImgSrcByFileObj, getImages, getImageBase64WithCache} from '@/utils/images'
@@ -166,8 +293,11 @@ const UserInfo = ref(getUserInfo())
 const form = ref({
   userName: '',
   signature: '',
-  sex: true
+  sex: true,
+  phone: ''
 })
+
+const showGetCaptchaDialog = ref(false)
 const imgSrc = ref('')
 
 const isUpdatingProfile = ref(false)
@@ -184,6 +314,12 @@ const onClickEditSignatureBtn = () => {
 
 }
 
+const captchaForm = ref({
+  username: '',
+  password: '',
+  captchaId: '',
+  captcha: ''
+})
 
 
 const handleExceed: UploadProps['onExceed'] = (files) =>{
@@ -243,6 +379,12 @@ const resetForm = () => {
   form.value.userName = UserInfo.value.userName
   form.value.signature = UserInfo.value.signature
   form.value.sex = UserInfo.value.sex == 'male' ? true : false
+  form.value.phone = UserInfo.value.phone
+
+  captchaForm.value.captchaId = ''
+  captchaForm.value.captcha = ''
+  captchaForm.value.username = ''
+  captchaForm.value.password = ''
 }
 
 const onClickEditProfileBtn = () => {
@@ -326,6 +468,43 @@ const init_avatar = () => {
   getImageBase64WithCache(bigAvatarSrc, 0, UserInfo.value.avatar);
 }
 
+const onClickUpdateUserInfoBtn = () => {
+  getCaptchaInfo().then(res => {
+    captchaForm.value.captchaId =  res.data.captchaId
+    captchaInfo.value.captchaId = res.data.captchaId
+    captchaInfo.value.captchaText = res.data.captchaText
+    showGetCaptchaDialog.value = true;
+  })
+}
+
+const loginCaptchaRules = ref({
+  username:[
+    { required: true, message: "用户名不能为空", trigger: 'blur' },
+  ],
+  password:[
+    { required: true, message: "密码不能为空", trigger: 'blur' },
+  ],
+  captcha:[
+    { required: true, message: "验证码不能为空", trigger: 'blur' },
+  ]
+})
+
+const captchaInfo = ref({})
+
+const onClickPlatformLoginBtn  = () => {
+  updateUserAuthorization(captchaForm.value).then(res => {
+    getNewUserProfile().then(() => {
+      UserInfo.value = getUserInfo()
+      resetForm()
+      ElMessage({
+        type: 'success',
+        message: "修改成功！"
+      })
+      showGetCaptchaDialog.value = false
+    })
+  })
+}
+
 onMounted(init_avatar)
 </script>
 
@@ -340,5 +519,47 @@ onMounted(init_avatar)
   height: 18px;
 }
 
+.title {
+  font-size: 20px;
+  color: #333;
+  padding-bottom: 40px;
+}
+.s-desc {
+  font-size: 14px;
+  color: #999;
+  padding-left: 5px;
+}
+/* 调整副标题文本颜色 */
+.sutitle {
+  font-size: 16px;
+  color: #6e6775;
+  padding-bottom: 10px;
+}
+.login-input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+}
+.login-input:focus {
+  border-color: #007bff; /* 更改边框颜色 */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 添加阴影效果 */
+  outline: none; /* 去掉默认的外部轮廓线 */
+}
+
+.login-button {
+  width: 100%;
+  //background-color: #0056b3;
+  //color: #fff;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.bottom-click-text-btn:hover{
+  color: #337ecc;
+}
 
 </style>

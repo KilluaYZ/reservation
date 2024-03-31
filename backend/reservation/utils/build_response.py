@@ -2,7 +2,7 @@
 该文件包含的函数主要功能是构造response
 """
 import json
-from datetime import datetime
+import datetime
 from bson import ObjectId
 from flask import make_response
 # from flask import jsonify
@@ -14,7 +14,7 @@ class PondJsonEncoder(JSONEncoder):
         :param field: 原始的数据
         :return: 处理后的数据
         """
-        if isinstance(field, datetime):
+        if isinstance(field, datetime.datetime):
             return field.strftime('%Y-%m-%d %H:%M:%S')
         elif isinstance(field, ObjectId):
             return str(field)

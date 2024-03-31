@@ -10,6 +10,7 @@ from reservation.database.Mongo import Mongo
 from bson.objectid import ObjectId
 from reservation.utils.Tools import *
 from reservation.email_sender.send_my_email import *
+import reservation.api.apis as apis
 
 bp = Blueprint('user', __name__, url_prefix='/user')
 mongo = Mongo()
@@ -39,7 +40,20 @@ def authorizeUserIdPassword(userId: ObjectId, password: str):
 def register_user_sql(userName: str, password: str, email: str):
     # execute_sql_write(pooldb, 'insert into users(username,password,email) values(%s,%s,%s)',
     #                   (userName, generate_password_hash(password), email))
-    return mongo.insert_one("User", {"userName": userName, "password": generate_password_hash(password), "email": email, "crateTime": datetime.datetime.now(), "avatar": ['https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'], 'roles': 'common', 'signature': '这个人无话可说~', 'sex': 'female'})
+    return mongo.insert_one("User",
+    {"userName": userName,
+     "password": generate_password_hash(password),
+     "email": email,
+     "crateTime": datetime.datetime.now(),
+     "avatar": [ObjectId('660843f50d808308eed0a8bc')],
+     'roles': 'common',
+     'signature': '这个人无话可说~',
+     'sex': 'female',
+     "authorization": "",
+     "userInfo": {},
+     "phone": ""
+     }
+    )
 
 
 # 检查email是不是唯一的，如果是则返回True，否则返回False
@@ -273,7 +287,10 @@ def profile_get():
                 "email": user['email'],
                 "avatar": user['avatar'],
                 "signature": user['signature'],
-                "sex": user['sex']
+                "sex": user['sex'],
+                "phone": user['phone'],
+                "userInfo": user['userInfo'],
+                "authorization": user['authorization']
             }
         }
         return build_success_response(response)
@@ -294,7 +311,6 @@ def profile_change():
         user = check_user_before_request(request)
 
         data = request.json
-        print(f"[DEBUG] {data}")
         user_profile_update_user_sql(user['_id'], data)
 
         return build_success_response()
@@ -391,3 +407,50 @@ def avatar_update_api():
     except Exception as e:
         logger.logger.error(e)
         return build_error_response(500, "服务器内部错误")
+
+
+@bp.route('/auth/update', methods=['POST'])
+def update_authorization():
+    try:
+        username = request.json['username']
+        password = request.json['password']
+        captchaId = request.json['captchaId']
+        captcha = request.json['captcha']
+        checkFrontendArgsIsNotNone(
+            [
+                {"key": "username", "val": username},
+                {"key": "password", "val": password},
+                {"key": "captchaId", "val": captchaId},
+                {"key": "captcha", "val": captcha},
+            ]
+        )
+        user = check_user_before_request(request)
+        resp = apis.login(username, password, captchaId, captcha)
+        if resp['code'] != 200:
+            raise NetworkException(400, f"更新Authorization出错，{resp['message']}")
+        authorization = resp['data']['token']
+        userInfo = resp['data']['userInfo']
+        mongo.update_one("User", {"_id": user["_id"]}, {"$set":{"authorization": authorization, "userInfo": userInfo}})
+        return build_success_response()
+
+    except NetworkException as e:
+        return build_error_response(code=e.code, msg=e.msg)
+    except Exception as e:
+        logger.logger.error(e)
+        return build_error_response(500, "服务器内部错误")
+
+@bp.route('/auth/getCaptcha', methods=['POST'])
+def auth_get_captcha():
+    try:
+        user = check_user_before_request(request)
+        resp = apis.get_captcha()
+        if resp['code'] != 200:
+            raise NetworkException(400, f"更新Authorization出错，{resp['message']}")
+        return build_success_response(resp['data'])
+
+    except NetworkException as e:
+        return build_error_response(code=e.code, msg=e.msg)
+    except Exception as e:
+        logger.logger.error(e)
+        return build_error_response(500, "服务器内部错误")
+

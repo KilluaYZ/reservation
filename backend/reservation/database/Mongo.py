@@ -10,8 +10,10 @@ import config
 MONGO_HOST = config.MONGO_HOST
 MONGO_PORT = config.MONGO_PORT
 MONGO_DB = config.MONGO_DB
-MONGO_USER = config.MONGO_USER
-MONGO_PASSWORD = config.MONGO_PASSWORD
+# MONGO_USER = config.MONGO_USER
+# MONGO_PASSWORD = config.MONGO_PASSWORD
+MONGO_USER = None
+MONGO_PASSWORD = None
 
 class Mongo:
     def __init__(self, 
@@ -31,7 +33,11 @@ class Mongo:
     def get_client(self) -> pymongo.MongoClient:
         try:
             if self.client is None:
-                self.client = pymongo.MongoClient(f'mongodb://{self.user}:{self.password}@{self.host}:{self.port}/')
+                if self.user is not None and self.password is not None:
+                    self.client = pymongo.MongoClient(f'mongodb://{self.user}:{self.password}@{self.host}:{self.port}/')
+                else:
+                    self.client = pymongo.MongoClient(f'mongodb://{self.host}:{self.port}/')
+
                 logger.logger.info(f"与MongoDB {self.host}:{self.port} 建立连接")
         except Exception as e:
             logger.logger.error(f"与MongoDB {self.host}:{self.port} 建立连接失败")

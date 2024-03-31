@@ -1,13 +1,13 @@
 from gridfs import *
 from reservation.database.Mongo import Mongo
 from reservation.utils.Logger import logger
-from datetime import datetime
+import datetime
 from bson import ObjectId
 import hashlib
 import mimetypes
 import base64
 
-mongofs = Mongo(database="PondMemoryFS")
+mongofs = Mongo(database="ReservationFS")
 mongo = Mongo()
 
 def uploadFileBinaryToDB(content: bytes) -> ObjectId:
@@ -57,7 +57,7 @@ def uploadFile(content: bytes, fileName: str, userId: ObjectId, isPrivate: bool 
             "fileId": fileId,
             "fileName": fileName,
             "mimeType": mimetypes.guess_type(fileName)[0],
-            "createTime": datetime.now(),
+            "createTime": datetime.datetime.now(),
             "userId": userId,
             "isPrivate": isPrivate,
             "fileType": fileType

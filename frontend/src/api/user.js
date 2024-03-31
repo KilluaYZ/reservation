@@ -104,7 +104,8 @@ export function changeUserProfile(data){
     const payload = {
         "userName": data.userName,
         "signature": data.signature,
-        "sex": data.sex ? 'male' : 'female'
+        "sex": data.sex ? 'male' : 'female',
+        "phone": data.phone
     }
     return request({
         url: 'user/profile/change',
@@ -133,3 +134,24 @@ export function updateAvatarListAPI(fileId){
     })
 }
 
+export function getCaptchaInfo(){
+    return request({
+        url: 'user/auth/getCaptcha',
+        method: 'post',
+        data: {}
+    })
+}
+
+export function updateUserAuthorization(form){
+    const data = {
+        username: form.username,
+        password: form.password,
+        captchaId: form.captchaId,
+        captcha: form.captcha
+    }
+    return request({
+        url: 'user/auth/update',
+        method: 'post',
+        data: data
+    })
+}
