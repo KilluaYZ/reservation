@@ -247,7 +247,7 @@ def process_single_task_thread(task: dict, user: dict, max_retry_times=3):
                 logToDB(task['_id'], 'ERROR', send_msg)
                 raise EmailException(send_msg)
 
-            time_end_datetime = datetime.datetime.strptime(f"{on_date} {time_start}", "%Y-%m-%d %H:%M")
+            time_end_datetime = datetime.datetime.strptime(f"{on_date} {time_end}", "%Y-%m-%d %H:%M")
             if current_time >= time_end_datetime:
                 send_msg = f"无法在您设置的时段({time_start} -- {time_end})内完成预约，本次预约任务已结束...\n{task_to_string(task, user)}"
                 logToDB(task['_id'], 'ERROR', send_msg)
