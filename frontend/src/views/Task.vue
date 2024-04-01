@@ -1,10 +1,10 @@
 
 <template>
 
-  <el-row style="width: 100%; height: 100%; justify-content: center; align-items: start">
-    <el-row style="width: 80%; height: 100%; margin: 30px 10px 30px 10px; flex-direction: column; justify-content: start; align-items: center; flex-wrap: nowrap">
+  <el-row style="width: 100%; height: 90%; justify-content: center; align-items: start">
+    <el-row style="width: 80%; height: 100%; margin: 30px 10px 0 10px; flex-direction: column; justify-content: start; align-items: center; flex-wrap: nowrap">
 
-      <el-row style="width: 100%; height: fit-content; padding: 20px 10px 20px 10px;  justify-content: end; align-items: center">
+      <el-row style="width: 100%; height: fit-content;  justify-content: end; align-items: center">
         <el-button type="primary" plain style="float:right; margin-right: 5px;" @click="onClickAddTaskBtn">新建任务</el-button>
         <el-badge :value="multipleSelectedUser.length">
           <el-button type="danger" plain style="float:right; margin-left: 5px;" @click="onClickDeleteTaskBtn">删除选中任务</el-button>
@@ -62,7 +62,7 @@
         <el-pagination
             v-model:current-page="currentPage"
             v-model:page-size="pageSize"
-            :page-sizes="[10, 25, 50, 75, 100]"
+            :page-sizes="[5, 10, 15, 20]"
             :background="true"
             layout="sizes, prev, pager, next"
             :total="total_table_data.length"
@@ -197,10 +197,11 @@
     v-model="showTaskLogDialog"
     title="任务运行日志"
     style="width:70%"
+    :before-close="onCloseTaskLogDialog"
   >
     <el-row style="width: 100%;height: 100%; background: #d3d2d2">
-      <el-row style="width: 100%; height: 500px; overflow: auto; justify-content: start; align-items: start">
-        <el-row v-if="taskLogs.length > 0" v-for="item in taskLogs" style="margin-top: 2px">
+      <el-row style="width: 100%; height: 500px; overflow: auto;">
+        <el-row v-if="taskLogs.length > 0" v-for="item in taskLogs" style="margin-top: 2px; width: 100%">
           <pre style="font-size: 14px">
 {{item}}
           </pre>
@@ -224,7 +225,7 @@ const multipleSelectedUser = ref([])
 const table_data = ref([])
 const total_table_data = ref([])
 const currentPage = ref(1)
-const pageSize = ref(10)
+const pageSize = ref(5)
 const showConfigTaskDialog = ref(false)
 const isUpdateTask = ref(false)
 const availableDays = ref([])
@@ -235,6 +236,7 @@ const availableTimeList = ref([])
 const availableRoomTypeIdToNameMap = ref({})
 const showTaskLogDialog = ref(false)
 const taskLogs = ref([])
+const currentTaskLogIntervalEvent = ref()
 
 const form = ref([{
   time_start: "",
@@ -423,7 +425,20 @@ const onClickViewLogsBtn = (task_obj) => {
   getTaskTextLog(task_obj._id).then(res => {
     taskLogs.value = res.data;
     showTaskLogDialog.value = true;
+    currentTaskLogIntervalEvent.value = setInterval(() => {
+      getTaskTextLog(task_obj._id).then(res => {
+        taskLogs.value = res.data;
+      })
+    }, 5000)
   })
+}
+
+const onCloseTaskLogDialog = (done) => {
+  if(currentTaskLogIntervalEvent.value !== undefined && currentTaskLogIntervalEvent !== null){
+    clearInterval(currentTaskLogIntervalEvent.value);
+    currentTaskLogIntervalEvent.value = undefined;
+  }
+  done()
 }
 
 onMounted(loadinfo)

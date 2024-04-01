@@ -15,6 +15,7 @@ import inspect
 import ctypes
 import reservation.api.apis as apis
 from reservation.utils.LogToDB import *
+from flask_sockets import Sockets
 
 bp = Blueprint('task', __name__, url_prefix='/task')
 mongo = Mongo()
@@ -302,9 +303,10 @@ def process_single_task_thread(task: dict, user: dict, max_retry_times=3):
                     break
 
             if res_room is None:
-                logToDB(task['_id'], 'INFO', f'未找到适合的静音仓，等待{interval_ms}ms后继续查找')
+                sleep_time = float(interval_ms) / 2 * (random.random() - 0.5) + float(interval_ms)
+                logToDB(task['_id'], 'INFO', f'未找到适合的静音仓，等待{int(sleep_time)}ms后继续查找')
                 try_time = 0
-                time.sleep(float(interval_ms)/1000)
+                time.sleep(sleep_time/1000)
                 continue
 
             logToDB(task['_id'], 'INFO', f'决定预约的静音仓为\n{room_to_string(res_room)}')
@@ -384,7 +386,7 @@ def stop_task():
         logToDB(task['_id'], 'INFO', '正在停止任务')
         if task_id not in TaskIdThreadMap:
             mongo.update_one('Task', {'_id': ObjectId(task_id), 'user_id': user['_id']}, {'$set': {'status': 'stop'}})
-            logToDB(task['_id'], 'INFO', '任务停止出错，任务没有在运行')
+            logToDB(task['_id'], 'INFO', '任务停止出错，任务没有在运行\n')
             raise NetworkException(400, f"无法找到任务id为{task_id}的正在运行中的线程")
 
         task_thread = TaskIdThreadMap[task_id]

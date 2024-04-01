@@ -30,7 +30,7 @@ def get_room_list(venueId: str, roomTypeId: str, selectDate: str, authorization:
         "selectDate": selectDate
     }
     tmp_resp = post_with_auth("https://zwlib.ruc.edu.cn/spa/static/api/book/getRoomList", authorization, request_data)
-    totalCount = tmp_resp['totalCount']
+    totalCount = tmp_resp['data']['totalCount']
     request_data["pageSize"] = totalCount
     return post_with_auth("https://zwlib.ruc.edu.cn/spa/static/api/book/getRoomList", authorization, request_data)
 

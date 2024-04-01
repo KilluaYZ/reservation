@@ -11,3 +11,4 @@ MAIL_TITLE='Reservation令牌'
 MAIL_INFO_TITLE='Reservation通知'
 AvalibleTimeStart=7*60
 AvalibleTimeEnd=22*60
+DefautlAvatarFileId='660843f50d808308eed0a8bc'

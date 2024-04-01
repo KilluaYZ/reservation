@@ -37,7 +37,7 @@ def authorizeUserIdPassword(userId: ObjectId, password: str):
 
 
 # 用户注册的sql语句, 默认的用户名随机生成，用户用phoneNumber和password注册
-def register_user_sql(userName: str, password: str, email: str):
+def register_user_sql(userName: str, password: str, email: str, phone: str):
     # execute_sql_write(pooldb, 'insert into users(username,password,email) values(%s,%s,%s)',
     #                   (userName, generate_password_hash(password), email))
     return mongo.insert_one("User",
@@ -45,13 +45,13 @@ def register_user_sql(userName: str, password: str, email: str):
      "password": generate_password_hash(password),
      "email": email,
      "crateTime": datetime.datetime.now(),
-     "avatar": [ObjectId('660843f50d808308eed0a8bc')],
+     "avatar": [ObjectId(config.DefautlAvatarFileId)],
      'roles': 'common',
      'signature': '这个人无话可说~',
      'sex': 'female',
      "authorization": "",
      "userInfo": {},
-     "phone": ""
+     "phone": phone
      }
     )
 
@@ -162,13 +162,15 @@ def register():
         password = request.json.get('password')
         checkCode = request.json.get('checkCode').strip()
         sessionKey = request.json.get('sessionKey')
+        phone = request.json.get('phone')
         checkFrontendArgsIsNotNone(
             [
                 {"key": "userName", "val": userName},
                 {"key": "email", "val": email},
                 {"key": "password", "val": password},
                 {"key": "checkCode", "val": checkCode},
-                {"key": "sessionKey", "val": sessionKey}
+                {"key": "sessionKey", "val": sessionKey},
+                {"key": "phone", "val": phone}
             ]
         )
 
@@ -178,7 +180,7 @@ def register():
         if not checkCheckCode(checkCode, sessionKey):
             raise NetworkException(400, '验证码错误')
 
-        register_user_sql(userName, password, email)
+        register_user_sql(userName, password, email, phone)
         return build_success_response()
 
     except NetworkException as e:

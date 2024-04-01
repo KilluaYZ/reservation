@@ -52,7 +52,7 @@ def sendChangePasswdEmail(userName: str, checkCode: str, mail_receiver: str):
     sendEmail(title, getChangePasswdEmail(userName, checkCode), mail_receiver)
 
 def sendTextEmail(msg: str, mail_receiver: str):
-    sendEmail(info_title, msg, mail_receiver)
+    sendEmail(info_title, msg, mail_receiver, 'plain')
 #
 # sendRegisterEmail('ziyang','57736','2020201694@ruc.edu.cn')
 # sendChangePasswdEmail('ziyang','57736','2020201694@ruc.edu.cn')
