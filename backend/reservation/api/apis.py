@@ -43,27 +43,20 @@ def get_room_detail(roomId: str, selectDate: str, authorization: str):
     return post_with_auth("tps://zwlib.ruc.edu.cn/spa/static/api/book/getRoomDtoByRoomIdAndDate", authorization, request_data)
 
 def save_reservation(begin:int, end: int, onDate: str, phone: str, roomId: str, theme: str, useType: str, authorization: str):
-    # request_data = {
-    #     "begin": begin,
-    #     "end": end,
-    #     "onDate": onDate,
-    #     "phone": phone,
-    #     "roomId": roomId,
-    #     "theme": theme,
-    #     "useType": useType,
-    #     "participants": "",
-    #     "filePath": "",
-    #     "source": "WEB",
-    #     "seatNo": 0
-    # }
-    #
-    # return post_with_auth("https://zwlib.ruc.edu.cn/spa/static/api/book/saveReservation",
-    #                       authorization,
-    #                       request_data)
-    print(f"begin: {begin}, end: {end}, onDate: {onDate}, phone: {phone}, roomId: {roomId}, theme: {theme}, useType: {useType}, authorization: {authorization}")
-    return {
-        "status": True,
-        "code": 200,
-        "message": "预约成功",
-        "data": ""
+    request_data = {
+        "begin": begin,
+        "end": end,
+        "onDate": onDate,
+        "phone": phone,
+        "roomId": roomId,
+        "theme": theme,
+        "useType": useType,
+        "participants": "",
+        "filePath": "",
+        "source": "WEB",
+        "seatNo": 0
     }
+
+    return post_with_auth("https://zwlib.ruc.edu.cn/spa/static/api/book/saveReservation",
+                          authorization,
+                          request_data)

@@ -45,7 +45,7 @@ def register_user_sql(userName: str, password: str, email: str, phone: str):
      "password": generate_password_hash(password),
      "email": email,
      "crateTime": datetime.datetime.now(),
-     "avatar": [ObjectId(config.DefautlAvatarFileId)],
+     "avatar": ObjectId(config.DefautlAvatarFileId),
      'roles': 'common',
      'signature': '这个人无话可说~',
      'sex': 'female',

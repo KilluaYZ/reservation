@@ -15,7 +15,6 @@ import inspect
 import ctypes
 import reservation.api.apis as apis
 from reservation.utils.LogToDB import *
-from flask_sockets import Sockets
 
 bp = Blueprint('task', __name__, url_prefix='/task')
 mongo = Mongo()

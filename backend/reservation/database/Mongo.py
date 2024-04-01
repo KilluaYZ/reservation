@@ -1,19 +1,12 @@
 import pymongo
-import config
 from reservation.utils.Logger import logger
-from flask import current_app
 import config
-# MONGO_HOST = current_app.config.get("MONGO_HOST")
-# MONGO_PORT = current_app.config.get("MONGO_PORT")
-# MONGO_DB = current_app.config.get("MONGO_DB")
 
 MONGO_HOST = config.MONGO_HOST
 MONGO_PORT = config.MONGO_PORT
 MONGO_DB = config.MONGO_DB
-# MONGO_USER = config.MONGO_USER
-# MONGO_PASSWORD = config.MONGO_PASSWORD
-MONGO_USER = None
-MONGO_PASSWORD = None
+MONGO_USER = config.MONGO_USER
+MONGO_PASSWORD = config.MONGO_PASSWORD
 
 class Mongo:
     def __init__(self, 
