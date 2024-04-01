@@ -99,6 +99,14 @@
                       size='large'
                   />
                 </el-form-item>
+                <el-form-item prop='phone'>
+                  <el-input
+                      v-model='form.phone'
+                      placeholder='手机号码'
+                      @change='onRegisterEmailChange'
+                      size='large'
+                  />
+                </el-form-item>
                 <el-form-item  prop='password'>
                   <el-input
                       v-model='form.password'
@@ -232,14 +240,16 @@ type FormType = {
   password: string,
   email: string,
   comfirmPassword: string,
-  checkCode: string
+  checkCode: string,
+  phone: string
 }
 const form = ref<FormType>({
   userName: "",
   password: "",
   email: "",
   comfirmPassword: "",
-  checkCode: ""
+  checkCode: "",
+  phone: ""
 })
 const cur_stage = ref('login')
 const check_code_count_down = ref<string>('')
@@ -261,6 +271,10 @@ const loginRules = ref({
 const registerRules = ref({
   email:[
     { required: true, message: "邮箱不能为空", trigger: 'blur' },
+    // { pattern:  /^([a-zA-Z0-9]+[-_\.]?)+@[a-zA-Z0-9]+\.[a-z]+$/, message: "邮箱格式不正确", trigger: 'blur'}
+  ],
+  phone:[
+    { required: true, message: "手机号不能为空", trigger: 'blur' },
     // { pattern:  /^([a-zA-Z0-9]+[-_\.]?)+@[a-zA-Z0-9]+\.[a-z]+$/, message: "邮箱格式不正确", trigger: 'blur'}
   ],
   userName:[
@@ -341,7 +355,8 @@ function onClickRegisterBtn(){
   let password: string = form.value.password;
   let confirmPassword: string = form.value.comfirmPassword;
   let checkCode: string = form.value.checkCode;
-  if(userName === undefined || email === undefined
+  let phone: string = form.value.phone;
+  if(userName === undefined || email === undefined || phone === undefined
       || password === undefined || confirmPassword === undefined || checkCode === undefined
       || userName.length === 0 || email.length === 0
       || password.length === 0 || confirmPassword.length === 0 || checkCode.length === 0){
@@ -360,7 +375,7 @@ function onClickRegisterBtn(){
     return;
   }
 
-  register(userName, email, password, checkCode, sessionKey.value).then((res) => {
+  register(userName, email, phone, password, checkCode, sessionKey.value).then((res) => {
     ElMessage({
       type: 'success',
       message: '注册成功，正在跳转主页面'

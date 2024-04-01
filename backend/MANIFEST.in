@@ -1,0 +1,12 @@
+global-include reservation/*
+graft reservation/api
+graft reservation/database
+graft reservation/email_sender
+graft reservation/file
+graft reservation/task
+graft reservation/user
+graft reservation/utils
+global-exclude *.pyc
+global-exclude *.git
+global-exclude *.idea
+

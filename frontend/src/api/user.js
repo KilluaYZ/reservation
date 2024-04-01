@@ -14,10 +14,11 @@ export function login(email, password){
     })
 }
 
-export function register(userName, email, password, checkCode, sessionKey){
+export function register(userName, email, phone, password, checkCode, sessionKey){
     const data = {
         userName,
         email,
+        phone,
         password,
         checkCode,
         sessionKey
