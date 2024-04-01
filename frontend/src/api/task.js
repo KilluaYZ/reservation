@@ -50,7 +50,7 @@ export function addTask(form){
     const data = {
         time_start: form.time_start,
         time_end: form.time_end,
-        onDate: form.onDate,
+        on_date: form.on_date,
         length: form.length,
         favored_venue: form.favored_venue,
         room_type: form.room_type,
@@ -65,10 +65,10 @@ export function addTask(form){
 
 export function updateTask(form){
     const data = {
-        task_id: form.task_id,
+        task_id: form._id,
         time_start: form.time_start,
         time_end: form.time_end,
-        onDate: form.onDate,
+        on_date: form.on_date,
         length: form.length,
         favored_venue: form.favored_venue,
         room_type: form.room_type,
@@ -102,4 +102,46 @@ export function listTask(){
     })
 }
 
+export function startTask(task_id){
+    const data = {
+        task_id
+    }
+    return request({
+        url: 'task/start',
+        method: 'post',
+        data: data
+    })
+}
 
+export function stopTask(task_id){
+    const data = {
+        task_id
+    }
+    return request({
+        url: 'task/stop',
+        method: 'post',
+        data: data
+    })
+}
+
+export function getTaskTextLog(task_id){
+    const data = {
+        task_id
+    }
+    return request({
+        url: 'task/log/text',
+        method: 'post',
+        data: data
+    })
+}
+
+export function getTaskJsonLog(task_id){
+    const data = {
+        task_id
+    }
+    return request({
+        url: 'task/log/json',
+        method: 'post',
+        data: data
+    })
+}

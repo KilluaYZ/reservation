@@ -73,6 +73,7 @@ def getFile(query:dict, mode='base64') -> dict:
     fileObj = mongo.find_one("File", query)
     if fileObj is None:
         return None
+    print(fileObj)
     if mode == 'binary':
         content = getFileBinaryFromDB({"_id": fileObj['fileId']})
     else:

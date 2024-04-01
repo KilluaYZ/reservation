@@ -1,6 +1,4 @@
 flask
 flask_cors
 pymongo
-jieba
 tqdm
-docker

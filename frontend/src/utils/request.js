@@ -4,7 +4,9 @@ import { getToken, logout } from '@/utils/auth'
 import errorCode from '@/utils/errorCode'
 import { Storage } from '@/utils/cache'
 import {tansParams} from '@/utils/ruoyi'
-
+import {useRouter} from "vue-router";
+// import router from "@/router/index.js";
+const router  = useRouter();
 // 是否显示重新登录
 export let isRelogin = { show: false };
 

@@ -11,9 +11,9 @@ const routes = [
         component: () => import('@/views/Personal.vue')
     },
     {
-        path:'/WechatMemory',
-        name:'WechatMemory',
-        component:()=> import('@/views/WechatMemory.vue')
+        path:'/task',
+        name:'Task',
+        component:()=> import('@/views/Task.vue')
     },
 ]
 
